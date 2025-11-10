@@ -12,11 +12,6 @@ variable "instancetype" {
   type        = string
 }
 
-variable "subnet" {
-  description = "Subnet ID for the instance"
-  type        = string
-}
-
 variable "key_name" {
   description = "EC2 key pair name (not the .pem file path). Set null to skip."
   type        = string

@@ -87,7 +87,7 @@ resource "aws_instance" "basic_vm" {
 
   ami           = data.aws_ami.image.id
   instance_type = var.instancetype
-  subnet_id     = var.subnet
+  subnet_id     = "subnet-0819602f505704135"
   key_name      = var.key_name
 
   root_block_device {
@@ -100,6 +100,7 @@ resource "aws_instance" "basic_vm" {
     Name          = "vm-${each.key}"
     Flavor        = var.flavor
     CreationRunId = each.key
+    BackupOption  = var.backup_option  # ✅ added exactly as requested
   }
 }
 
