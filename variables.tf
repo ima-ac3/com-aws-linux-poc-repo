@@ -1,8 +1,5 @@
-variable "subnet" {}
-variable "network" {}
 variable "instancetype" {}
 variable "ami" {}
-variable "keyname" {}
 variable "root_volume_size"{}
 variable "root_volume_type"{}
 variable "disks" {

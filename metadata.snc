@@ -1,8 +1,5 @@
 "Metadata": {
   "SNC::Parameter::Metadata": {
-    "keyname": {
-      "datasource": "ServiceNow::Pools::CloudKeyPairPool.getObjectsByLDC"
-    },
     "instancetype": {
       "datasource": "ServiceNow::Pools::HardwareTypePool.getObjectsByLDC"
     }
