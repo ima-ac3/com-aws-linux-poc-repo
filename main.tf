@@ -83,7 +83,7 @@ locals {
 # EC2 instance (brand-new each apply)
 ########################################
 resource "aws_instance" "basic_vm" {
-  for_each = { (local.run_id) = local.run_id }
+  for_each = { local.run_id = local.run_id }
 
   ami           = data.aws_ami.image.id
   instance_type = var.instancetype
@@ -100,12 +100,14 @@ resource "aws_instance" "basic_vm" {
     Name          = "vm-${each.key}"
     Flavor        = var.flavor
     CreationRunId = each.key
-    BackupOption  = var.backup_option  
-}
+    BackupOption  = var.backup_option
+  }
+}  # ✅ missing brace added
 
 ########################################
 # Flatten disks for THIS RUN
 ########################################
+
 locals {
   flat_disks = [
     for idx, d in var.disks : {
@@ -146,5 +148,5 @@ resource "aws_volume_attachment" "attachments" {
                      tonumber(element(split("-", each.key), 1)), 1)}"
 
   volume_id   = each.value.id
-  instance_id = aws_instance.basic_vm[each.value.tags.CreationRunId].id
+  instance_id = aws_instance.basic_vm[each.value.vm_key].id   # ✅ corrected
 }
