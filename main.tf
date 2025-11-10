@@ -83,9 +83,6 @@ locals {
 # EC2 instance (brand-new each apply)
 ########################################
 resource "aws_instance" "basic_vm" {
-  for_each = {
-    (local.run_id) = local.run_id
-  }
 
   ami           = data.aws_ami.image.id
   instance_type = var.instancetype
@@ -99,9 +96,9 @@ resource "aws_instance" "basic_vm" {
   }
 
   tags = {
-    Name          = "vm-${each.key}"
+    Name          = "vm-${local.run_id}"
     Flavor        = var.flavor
-    CreationRunId = each.key
+    CreationRunId = local.run_id
     BackupOption  = var.backup_option
   }
 }
@@ -127,7 +124,7 @@ locals {
 resource "aws_ebs_volume" "ebs_volumes" {
   for_each = { for d in local.flat_disks : d.key => d }
 
-  availability_zone = aws_instance.basic_vm[each.value.vm_key].availability_zone
+  availability_zone = aws_instance.basic_vm.availability_zone
   size              = each.value.size
   type              = each.value.vtype
   iops              = (each.value.vtype == "io1" || each.value.vtype == "io2") ? 100 : null
@@ -149,5 +146,5 @@ resource "aws_volume_attachment" "attachments" {
                      tonumber(element(split("-", each.key), 1)), 1)}"
 
   volume_id   = each.value.id
-  instance_id = aws_instance.basic_vm[each.value.vm_key].id
+  instance_id = aws_instance.basic_vm.id
 }
