@@ -100,8 +100,7 @@ resource "aws_instance" "basic_vm" {
     Name          = "vm-${each.key}"
     Flavor        = var.flavor
     CreationRunId = each.key
-    BackupOption  = var.backup_option  # ✅ added exactly as requested
-  }
+    BackupOption  = var.backup_option  
 }
 
 ########################################
